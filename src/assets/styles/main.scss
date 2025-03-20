@@ -1,0 +1,15 @@
+@use './cursor.scss' as cs;
+@import './base.css';
+
+
+@font-face {
+  font-display: swap;
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./fonts/sf-pro-display/SFPRODISPLAYREGULAR.OTF') format('opentype')
+}
+
+body {
+  @include cs.base-cursor;
+}

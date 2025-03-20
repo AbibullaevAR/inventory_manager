@@ -1,0 +1,12 @@
+
+@mixin base-cursor {
+  cursor: url('../icons/base_cursor.svg'), default;
+}
+
+@mixin pointer-cursor {
+  cursor: url('../icons/pointer_cursor.svg'), pointer;
+}
+
+@mixin grab-cursor {
+  cursor: url('../icons/grab-cursor.svg'), grab;
+}
