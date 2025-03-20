@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  width: { type: String, default: "100%" },
-  height: { type: String, default: "20px" },
-  borderRadius: { type: String, default: "4px" }
+const props = withDefaults(defineProps<{
+  width?: string,
+  height?: string,
+  borderRadius?: string
+}>(), {
+  width: '100%',
+  height: '20px',
+  borderRadius: '4px'
 });
 
 const style = computed(() => ({
