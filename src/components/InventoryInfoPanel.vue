@@ -38,10 +38,10 @@ import Skeleton from '@/components/ui/Skeleton.vue';
     gap: 16px;
 
     :first-child {
-      margin-bottom: 16px;
+      margin-bottom: 8px;
     }
     :last-child {
-      margin-top: 16px;
+      margin-top: 8px;
     }
   }
 }
