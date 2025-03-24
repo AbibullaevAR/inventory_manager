@@ -4,19 +4,36 @@ import { ref } from 'vue';
 import { useInventoryStore } from '@/stores/inventory';
 import type { InventoryItem } from '@/stores/types';
 
+
+const emit = defineEmits<{
+  (e: 'update:selectedItemId', value: number): void
+}>();
+
+const inventoryElement = ref<HTMLElement>();
 const inventoryStore = useInventoryStore();
 const draggedItem = ref<null | InventoryItem>(null);
 const position = ref({
   x: 0,
   y: 0
 });
+let dragStartTimeout: number;
 
-const mousemoveHandler = (event: MouseEvent) => {
-  position.value.x = event.x;
-  position.value.y = event.y;
+const itemMousedownHandler = (item: InventoryItem) => {
+  dragStartTimeout = setTimeout(() => dragStart(item), 90);
 }
 
-const onDragStart = (item: InventoryItem) => {
+const itemMouseupHandler = (selectedItemId: number) => {
+  emit('update:selectedItemId', selectedItemId);
+  clearTimeout(dragStartTimeout);
+}
+
+const mousemoveHandler = (event: MouseEvent) => {
+  const rect = inventoryElement.value?.getBoundingClientRect() || { x: 0, y: 0 };
+  position.value.x = event.x - rect?.x;
+  position.value.y = event.y - rect?.y;
+}
+
+const dragStart = (item: InventoryItem) => {
   draggedItem.value = {...item};
 };
 
@@ -50,6 +67,7 @@ const swapItemsPosition = (item1: InventoryItem, item2: InventoryItem) => {
         'inventory-view_action': !!draggedItem
       }
     ]"
+    ref="inventoryElement"
     @mousemove="mousemoveHandler"
   >
     <div
@@ -60,7 +78,8 @@ const swapItemsPosition = (item1: InventoryItem, item2: InventoryItem) => {
     >
       <Item
         v-if="inventoryStore.positionItemMap[index]"
-        @mousedown="onDragStart(inventoryStore.positionItemMap[index])"
+        @mouseup="itemMouseupHandler(inventoryStore.positionItemMap[index].id)"
+        @mousedown="itemMousedownHandler(inventoryStore.positionItemMap[index])"
         :item="inventoryStore.positionItemMap[index]"
         :is-dragging="inventoryStore.positionItemMap[index]?.id === draggedItem?.id"
         :position="position"
@@ -75,6 +94,10 @@ const swapItemsPosition = (item1: InventoryItem, item2: InventoryItem) => {
   display: grid;
   grid-template-columns: repeat(5, 105px);
   grid-template-rows: repeat(5, 100px);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--color-grey);
+  position: relative;
 
   &_action {
     @include cs.grab-cursor;

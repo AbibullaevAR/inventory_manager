@@ -47,5 +47,16 @@ export const useInventoryStore = defineStore('inventory', () => {
     localStorage.setItem(ITEMS_KEY_IN_STORE, JSON.stringify(value));
   }
 
-  return { items, positionItemMap, setItems };
+  const updateItemCount = (itemId: number, count: number) => {
+    const changedItem = items.value.find(item => item.id === itemId);
+    if (!changedItem) return;
+
+    changedItem.count = count;
+    setItems([
+      changedItem,
+      ...items.value.filter(item => item.id !== itemId)
+    ]);
+  }
+
+  return { items, positionItemMap, setItems, updateItemCount };
 });

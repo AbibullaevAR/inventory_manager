@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<{
     color: var(--color-black);
   }
   &_appearance-danger {
-    background-color: red;
+    background-color: #FA7272;
     color: var(--color-white);
   }
 }
